@@ -1,4 +1,4 @@
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 
 void draw(void) {
   glClearColor(0,1,0,1);
