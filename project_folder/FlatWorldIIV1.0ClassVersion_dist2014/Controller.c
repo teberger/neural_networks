@@ -53,12 +53,10 @@ void agents_controller( WORLD_TYPE *w )
       collision_flag = read_soma_sensor(w, a) ; 	
       skinvalues = extract_soma_receptor_values_pointer( a ) ;
       nsomareceptors = get_number_of_soma_receptors( a ) ;
-      for( k=0 ; k<nsomareceptors ; k++ ) { 
-	if( (k==0 || k==1 || k==7 ) && skinvalues[k][0]>0.0 )
-	  {
-	    delta_energy = eat_colliding_object( w, a, k) ;
-	  }
-      }
+
+      for( k=0 ; k<nsomareceptors ; k++ ) 
+	if( (k==0 || k==1 || k==7 ) && skinvalues[k][0]>0.0 ) 
+	  delta_energy = eat_colliding_object( w, a, k) ;
     
     /* read hearing sensors and load spectra for each ear, and compute integrated sound magnitudes */
     read_acoustic_sensor( w, a) ;
