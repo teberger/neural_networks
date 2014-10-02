@@ -29,8 +29,9 @@ weights = [all_ones, random_weights]
 all_ones :: Seed -> Length -> [Double]
 all_ones _ l = [1 | x <- [1..l]]
 
-random_weights :: Seed -> Length -> [Double]
-random_weights = undefined
+random_weights :: Seed -> Length -> IO [Double]
+random_weights = do
+  r <- getRandomR
 
 main :: IO ()
 main = do
