@@ -5,7 +5,7 @@ import System.Environment
 import Data.List
 import System.Random
 
-type Epoch a b = [Sample a b]
+type Epoch a = [Sample a]
 data Sample a = Sample { datum :: a,
                          classification :: (Enum b => b)}
 
