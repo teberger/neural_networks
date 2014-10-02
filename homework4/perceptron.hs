@@ -31,6 +31,7 @@ random = undefined
 main :: IO ()
 main = do
   args <- getArgs
+  print args
 
 getData :: Enum b => Sample a b -> a
 getData s = datum s
