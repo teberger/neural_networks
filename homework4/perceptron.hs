@@ -24,13 +24,13 @@ type Length = Int
 type Seed = Int
 
 weights :: [Seed -> Length -> [Double]]
-weights = [ones, random]
+weights = [all_ones, random_weights]
 
-ones :: Seed -> Length -> [Double]
-ones = undefined
+all_ones :: Seed -> Length -> [Double]
+all_ones _ l = [1, x <- [1..l]]
 
-random :: Seed -> Length -> [Double]
-random = undefined
+random_weights :: Seed -> Length -> [Double]
+random_weights = undefined
 
 main :: IO ()
 main = do
