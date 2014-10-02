@@ -35,7 +35,7 @@ random_weights = undefined
 main :: IO ()
 main = do
   args <- getArgs
-  print $ all_ones 1
+  print $ all_ones 1 10
 
 getData :: Enum b => Sample a b -> a
 getData s = datum s
