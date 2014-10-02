@@ -19,8 +19,6 @@ eta_params = [0.0 , 0.05, 0.1,
 main :: IO ()
 main = do
   args <- getArgs
-  print args
-  print eta_params
 
 getData :: Enum b => Sample a b -> a
 getData s = datum s
