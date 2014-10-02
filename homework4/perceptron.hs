@@ -11,8 +11,8 @@ eta_params = [0..1]
 main :: IO ()
 main = return ()
 
-getData :: Sample a b -> a
+getData :: Enum b => Sample a b -> a
 getData s = datum s
 
-getClass :: Sample a b -> b
+getClass :: Enum b =>  Sample a b -> b
 getClass s = classification s
