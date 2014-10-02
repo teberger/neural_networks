@@ -16,8 +16,14 @@ eta_params = [0.0 , 0.05, 0.1,
               0.45, 0.5
              ]
 
-weights :: [Double]
-weights = []
+weights :: [Int -> [Double]]
+weights = [ones, random]
+
+ones :: Int -> [Double]
+ones = pass
+
+random :: Int -> [Double]
+random = pass
 
 main :: IO ()
 main = do
