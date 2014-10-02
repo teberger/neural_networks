@@ -3,7 +3,7 @@ module Main where
 
 import System.Environment
 import Data.List
-import Data.Random
+import System.Random
 
 type Epoch a b = [Sample a b]
 data Sample a b = Sample { datum :: a,
