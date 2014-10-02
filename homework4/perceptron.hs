@@ -27,7 +27,7 @@ weights :: [Seed -> Length -> IO [Double]]
 weights = return [all_ones, random_weights]
 
 all_ones :: Seed -> Length -> IO [Double]
-all_ones _ l = [1 | x <- [1..l]]
+all_ones _ l = [1 | x <- [1..l]] :: [Double]
 
 random_weights :: Seed -> Length -> IO [Double]
 random_weights = do
