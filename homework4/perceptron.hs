@@ -30,8 +30,7 @@ all_ones :: Seed -> Length -> [Double]
 all_ones _ l = [1 | x <- [1..l]] :: [Double]
 
 random_weights :: Seed -> Length -> [Double]
-random_weights = do
-  return []
+random_weights = undefined
 
 main :: IO ()
 main = do
