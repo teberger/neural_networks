@@ -5,6 +5,8 @@ type Epoch a b = [Sample a b]
 data Sample a b = Sample { datum :: a,
                            classification :: (Enum b => b)}
 
+data Classes = C1 | C2 deriving Enum Classes
+
 eta_params :: [Double]
 eta_params = [0.0 , 0.05, 0.1,
               0.15, 0.2 , 0.25,
@@ -12,7 +14,6 @@ eta_params = [0.0 , 0.05, 0.1,
               0.45, 0.5
              ]
 
-data Classes = C1 | C2 deriving Enum
 
 main :: IO ()
 main = print eta_params
