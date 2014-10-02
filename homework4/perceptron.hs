@@ -1,6 +1,8 @@
 {-# LANGUAGE RankNTypes #-}
 module Main where
 
+import System.Environment
+
 type Epoch a b = [Sample a b]
 data Sample a b = Sample { datum :: a,
                            classification :: (Enum b => b)}
