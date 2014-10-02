@@ -12,6 +12,8 @@ eta_params = [0.0 , 0.05, 0.1,
               0.45, 0.5
              ]
 
+data Classes = C1 | C2 derving Enum
+
 main :: IO ()
 main = print eta_params
 
