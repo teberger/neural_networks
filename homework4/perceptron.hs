@@ -1,3 +1,4 @@
+{-#LANGUAGE RankNTypes-}
 module Main where
 
 type Epoch a b = [Sample a b]
