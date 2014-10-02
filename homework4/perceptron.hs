@@ -16,6 +16,9 @@ eta_params = [0.0 , 0.05, 0.1,
               0.45, 0.5
              ]
 
+weights :: [Double]
+weights = []
+
 main :: IO ()
 main = do
   args <- getArgs
