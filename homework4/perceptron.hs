@@ -16,14 +16,17 @@ eta_params = [0.0 , 0.05, 0.1,
               0.45, 0.5
              ]
 
-weights :: [Int -> [Double]]
+type Length = Int
+type Seed = Int
+
+weights :: [Seed -> Length -> [Double]]
 weights = [ones, random]
 
-ones :: Int -> [Double]
-ones = pass
+ones :: Seed -> Length -> [Double]
+ones = undefined
 
-random :: Int -> [Double]
-random = pass
+random :: Seed -> Length -> [Double]
+random = undefined
 
 main :: IO ()
 main = do
