@@ -24,7 +24,7 @@ type Length = Int
 type Seed = Int
 
 weights :: [Seed -> Length -> [Double]]
-weights = return [all_ones, random_weights]
+weights =  [all_ones, random_weights]
 
 all_ones :: Seed -> Length -> [Double]
 all_ones _ l = [1 | x <- [1..l]] :: [Double]
