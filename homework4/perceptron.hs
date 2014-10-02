@@ -33,6 +33,9 @@ all_ones _ l = return $ [1 | x <- [1..l]]
 random_weights :: WeightGenerator
 random_weights = undefined
 
+shuffleList :: Random -> [a] -> [a]
+shuffleList = undefined
+
 main :: IO ()
 main = do
  args <- getArgs
