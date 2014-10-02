@@ -31,7 +31,7 @@ all_ones _ l = [1 | x <- [1..l]]
 
 random_weights :: Seed -> Length -> IO [Double]
 random_weights = do
-  r <- 
+  return []
 
 main :: IO ()
 main = do
