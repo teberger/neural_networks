@@ -6,7 +6,11 @@ data Sample a b = Sample { datum :: a,
                            classification :: (Enum b => b)}
 
 eta_params :: [Double]
-eta_params = [0,0.1..1]
+eta_params = [0.0 , 0.05, 0.1,
+              0.15, 0.2 , 0.25,
+              0.3 , 0.35, 0.4,
+              0.45, 0.5
+             ]
 
 main :: IO ()
 main = print eta_params
