@@ -23,13 +23,13 @@ eta_params = [0.0 , 0.05, 0.1,
 type Length = Int
 type Seed = Int
 
-weights :: [Seed -> Length -> IO [Double]]
+weights :: [Seed -> Length -> [Double]]
 weights = return [all_ones, random_weights]
 
-all_ones :: Seed -> Length -> IO [Double]
+all_ones :: Seed -> Length -> [Double]
 all_ones _ l = [1 | x <- [1..l]] :: [Double]
 
-random_weights :: Seed -> Length -> IO [Double]
+random_weights :: Seed -> Length -> [Double]
 random_weights = do
   return []
 
