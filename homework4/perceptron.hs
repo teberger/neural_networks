@@ -2,7 +2,7 @@ module Main where
 
 type Epoch a b = [Sample a b]
 data Sample a b = Sample { datum :: a,
-                           classification :: Enum b}
+                           classification :: (Enum b => b)}
 
 eta_params :: [Double]
 eta_params = [0:1:(0.5)]
