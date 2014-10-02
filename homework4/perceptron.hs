@@ -6,8 +6,8 @@ import Data.List
 import System.Random
 
 type Epoch a b = [Sample a b]
-data Sample a b = Sample { datum :: a,
-                           classification :: (Enum b => b)}
+data Sample a = Sample { datum :: a,
+                         classification :: (Enum b => b)}
 
 data Classes = C1 | C2 deriving Enum
 
