@@ -9,7 +9,7 @@ eta_params :: [Double]
 eta_params = [0,0.05..1]
 
 main :: IO ()
-main = return ()
+main = print eta_params
 
 getData :: Enum b => Sample a b -> a
 getData s = datum s
