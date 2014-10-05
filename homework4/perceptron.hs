@@ -45,8 +45,8 @@ main = do
   c2Data <- constructData C2 =<< hGetContents =<< openFile train_c2 ReadMode
   c2Test <- constructData C2 =<< hGetContents =<< openFile train_c2 ReadMode
 
-  let trainingData = c1Data ++ c2Data
-      testingData = c1Test ++ c2Test
+  let trainingData = c1Data ++ c2Data :: [Sample Double Classes]
+      testingData = c1Test ++ c2Test :: [Sample Double Classes]
       
   print $ datum $ c1Data !! 1
 
