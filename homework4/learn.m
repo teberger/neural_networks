@@ -3,6 +3,9 @@ function [ new_weights, error ] = learn( weights, input, eta , shouldLearn)
 %   Detailed explanation goes here
     x = weights * input(1:2)';
     y = sign(x);
+    if (y == 0)
+        y = 1;
+    end
     d = input(3);
 
     error = sign(d - y);
