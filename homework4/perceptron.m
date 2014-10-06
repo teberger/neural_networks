@@ -20,6 +20,7 @@ hold on;
 xlabel('dimension: x1');
 ylabel('dimension: x2');
 title('Weight Vector and Decision Boundaries (eta variation)')
+
 scatter(c1_train(:,1), c1_train(:,2),'.');
 scatter(c2_train(:,1), c2_train(:,2),'.');
 
@@ -46,9 +47,11 @@ for j = 1 : length(eta_values')
         epoch = epoch + 1;
         eta_variation_output = [eta_variation_output; [eta, epoch, training_error, testing_error]];
     end
-    line([0,new_weights(1)], [0, new_weights(2)],'LineStyle', '--');
+    line([0,new_weights(1)], [0, new_weights(2)],'LineStyle', '--', 'color', 'r');
     minv = -1 / (new_weights(2)/new_weights(1));
-    line([-2, 2], [-2*minv, 2*minv],'LineStyle', '--');
+    line([-2, 2], [-2*minv, 2*minv],'LineStyle', '--', 'color', 'k');
 end
+
 eta_variation_output = eta_variation_output(2:(length(eta_variation_output(:,1))), :);
 
+legend('black lines : decision boundaries', 'red lines: weight vectors');
