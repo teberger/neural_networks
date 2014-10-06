@@ -8,9 +8,14 @@ import qualified Data.Map as Map
 import qualified Data.Vector as V
 import Data.List
 
+type Error = Double
 type Epoch a b = [Sample a b]
+
 data Sample a b = Sample { datum :: (Num a) => V.Vector a,
-                           classification :: (Enum b) => b}
+                           classification :: (Enum b) => b
+                         }
+                  
+data Classes = C1 | C2 deriving (Enum, Show, Eq)
 
 instance (Num a, Enum b, Show a, Show b) => Show (Sample a b) where
   show (Sample a b) = (show a) ++ "\n" ++ "class: " ++ (show b)
@@ -19,13 +24,11 @@ data Perceptron a = Perceptron { w :: (Num a) => V.Vector a,
                                  y :: Double -> Double
                                }
 
-data Classes = C1 | C2 deriving (Enum, Show)
-
 eta_params :: [Double]
-eta_params = [0.0 , 0.05, 0.1,
-              0.15, 0.2 , 0.25,
-              0.3 , 0.35, 0.4,
-              0.45, 0.5
+eta_params = [0.05, 0.1 , 0.15,
+              0.2 , 0.25, 0.3 ,
+              0.35, 0.4 , 0.45,
+              0.5
              ]
              
 type Length = Int
@@ -47,8 +50,57 @@ main = do
 
   let trainingData = c1Data ++ c2Data :: [Sample Double Classes]
       testingData = c1Test ++ c2Test :: [Sample Double Classes]
-      
-  print $ datum $ c1Data !! 1
+
+  hOutput <- openFile "eta_variation.csv" WriteMode
+  hSetBuffering hOutput LineBuffering
+  hPutStr hOutput "eta epoch training_error testing_error"
+  let p = Perceptron (V.fromList (all_ones 1 2)) syn
+  mapM_ (converge hOutput 0 p trainingData testingData) eta_params
+
+syn :: Double -> Double
+syn x = if x < 0 then -1 else 1
+
+converge :: Handle -> Int -> Perceptron Double -> Epoch Double Classes -> Epoch Double Classes -> Double -> IO ()
+converge file num p train test eta = do
+  putStrLn $ "Beginning epoch: " ++ (show num)
+  let (p', e) = learnEpoch p train eta
+      testError = testEpoch p test eta
+  hPutStrLn file $ (show eta) ++ " " ++
+                   (show num) ++ " " ++
+                   (show e) ++ " " ++
+                   (show testError)
+  if (e == 0) then return () else converge file (num + 1) p' train test eta
+  
+testEpoch :: Perceptron Double -> Epoch Double Classes -> Double -> Error
+testEpoch p ls eta = foldl (\e sample -> e + (test eta p sample)) 0 ls
+
+learnEpoch :: Perceptron Double -> Epoch Double Classes -> Double -> (Perceptron Double, Error)
+learnEpoch p ls eta = foldl (\(p, e) sample ->
+                            let (p', e') = learn eta p sample
+                            in (p', e + e'))
+                          (p, 0)
+                          ls
+
+test :: Double -> Perceptron Double -> Sample Double Classes -> Error
+test eta p@(Perceptron xs y) s@(Sample v c) = if c == clazz then 0 else 1
+  where (clazz, sign) = classify p s
+
+learn :: Double -> Perceptron Double -> Sample Double Classes -> (Perceptron Double, Error)
+learn eta p@(Perceptron xs y) s@(Sample v c) = if c == clazz then (p, 0) else (Perceptron (deltaW xs sign eta v) y, 2)
+  where (clazz, sign) = classify p s 
+
+deltaW :: V.Vector Double -> Error -> Double -> V.Vector Double -> V.Vector Double
+deltaW xs sign eta vs = V.zipWith (+) xs (V.map (* (eta * sign)) vs)
+
+classify :: Perceptron Double -> Sample Double Classes -> (Classes, Error)
+classify (Perceptron xs y) (Sample v c) = if output /= 0 then (switch c, sign) else (c, sign)
+  where output = y (dot xs v)
+        sign = if output < 0 then -1 else 1
+
+switch c = if c == C1 then C2 else C1
+
+dot :: Num a => V.Vector a -> V.Vector a -> a
+dot a b = (V.foldl (+) 0) (V.zipWith (*) a b)
 
 constructData :: Classes -> String -> IO [Sample Double Classes]
 constructData clazz file = return constructSamples
