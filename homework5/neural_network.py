@@ -27,7 +27,7 @@ class NeuralNetwork():
 
         for input in self.layers[layer_number - 1]:
             for output in neurons:
-                input.addOutput(output)
-                weight = self.randomizeWeight
-                output.addInput(input, weight)
+                output.addOutput(input)
+                weight = self.randomizeWeight()
+                input.addInput(output, weight)
 
