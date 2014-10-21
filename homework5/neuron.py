@@ -1,11 +1,13 @@
 __author__ = 'Taylor Berger'
 
 class Neuron():
-    def __init__(self, bias, activation_func):
+    def __init__(self, bias, activation_func, activation_prime):
         self.bias  = bias
+        self.induced_field = 0.0
         self.output = 0.0
-        self.error = 0.0
+        self.local_gradient = 0.0
         self.phi = activation_func
+        self.phi_prime = activation_prime
         self.inputs = {}
         self.outputs = []
 
@@ -16,15 +18,21 @@ class Neuron():
         self.outputs.append(o)
 
     def forward_prop(self):
-        induced_field = 0
+        self.induced_field = 0.0
         for i in self.inputs.keys():
-            induced_field += i.output * self.inputs[i]
+            self.induced_field += i.output * self.inputs[i]
 
-        self.output = self.phi(induced_field + self.bias)
+        self.output = self.phi(self.induced_field + self.bias)
 
-    def back_prop(self):
-        delta = 0
-        for i in self.outputs:
-            delta += i.inputs[self] * i.error
+    def back_prop(self, eta, phi_prime):
+        #first calculate my own local gradient for the neurons behind me
+        self.local_gradient = 0
+        for o in self.outputs:
+            self.local_gradient += o.inputs[self] * o.local_gradient
 
-        #TODO: finish back propagation
+        self.local_gradient *= self.phi_prime(self.induced_field)
+
+        #adjust the input weights from me to the neurons I provide input to
+        #based on the back propagation calculations
+        for i in self.inputs:
+            self.inputs[i] = self.inputs[i] + eta * i.local_gradient * self.output
