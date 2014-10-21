@@ -2,3 +2,5 @@
 *.o
 *~
 homework4/perceptron
+homework5/.idea
+homework5/*.pdf
