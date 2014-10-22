@@ -3,20 +3,24 @@ __author__ = 'Taylor'
 import random
 
 class NeuralNetwork():
-    def __init__(self, seed, init_weights = 'random'):
+    def __init__(self, seed, init_weights = 'random', init_weight = 0):
         """
 
         :param seed:
         :param init_weights:
         """
         self.random = random.seed(seed)
-        self.weights = init_weights
+        self.weight_style = init_weight_style
+        self.init_weight = init_weight
         self.layers = {}
         self.inputs = set()
         self.outputs = set()
 
     def randomizeWeight(self):
-        return self.random.random()
+        if self.weight_style == 'random':
+            return self.random.random()
+        else:
+            return self.init_weight
 
     def addLayer(self, neurons, layer_number):
         self.layers[layer_number] = neurons
@@ -30,4 +34,3 @@ class NeuralNetwork():
                 output.addOutput(input)
                 weight = self.randomizeWeight()
                 input.addInput(output, weight)
-
