@@ -12,7 +12,7 @@ def useage():
              Usage is as follows:
                 arg1: random seed
                 arg2: eta parameter
-                argX: number of neurons in layer X as an integer
+                argX: number of neurons in hidden layer X as an integer
 
              the program will create as many hidden layers as there are
              arguments greater than 2
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     inputfile = open('TestingData.txt')
     testing_raw = inputfile.read()
 
-    #TODO: Read input and map to input layer, error correction
+     #TODO: Read input and map to input layer, error correction
     for line in training_raw:
         pass #train the network via backprop
 
