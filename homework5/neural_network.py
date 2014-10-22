@@ -30,6 +30,7 @@ class NeuralNetwork():
             return
 
         for input in self.layers[layer_number - 1]:
+            #TODO: Make sure this correct
             for output in neurons:
                 output.addOutput(input)
                 weight = self.randomizeWeight()
