@@ -3,12 +3,15 @@ __author__ = 'Taylor'
 from numpy import *
 from neuron import *
 from neural_network import *
+from functools import *
 import sys
+
 
 def useage():
     print '''
              Usage is as follows:
                 arg1: random seed
+                arg2: eta parameter
                 argX: number of neurons in layer X as an integer
 
              the program will create as many hidden layers as there are
@@ -53,7 +56,8 @@ def parseArgs(args):
         exit(1)
 
     seed = int(args[1])
-    layer_strings = args[2:]
+    eta = float(args[2])
+    layer_strings = args[3:]
     layers = []
     try:
         layers = [int(l) for l in layer_strings]
@@ -61,21 +65,32 @@ def parseArgs(args):
         useage()
         exit(1)
 
-    return seed, layers
+    return seed, eta, layers
 
 
-#TODO: toy with the number of layers, neurons per layer, random seeding,
+#TODO: toy with the number of layers, neurons per layer, random seeding, etc
 if __name__ == '__main__':
-    seed, layers = parseArgs(sys.argv)
-    phi = logistic_function(1)
-    phi_prime = logistic_deriv(1)
-    network = NeuralNetwork(seed, init_weights='random_weights')
+    seed, eta, layers = parseArgs(sys.argv)
+    random.seed(seed)
+    phi = partial(logistic_function, 1)
+    phi_prime = partial(logistic_deriv, 1)
+    network = NeuralNetwork(eta, init_weights='random')
 
     for layer_number, neuron_count in enumerate(layers):
         #select some random bias for this layer
         bias = random.randint(-5,5)
         neurons = [ Neuron(bias, activation_func=phi, activation_prime=phi_prime) for _ in range(neuron_count) ]
-        network.addLayer(neurons, layer_number)
+        network.add_layer(neurons, layer_number)
+
+    mapping = {}
+    for i in network.get_input_layer():
+        mapping[i] = 1.0
+
+    network.forward_propagation(mapping)
+
+    for i in network.get_output_layer():
+        mapping[i] = 1.0
+    network.backward_propagation(mapping)
 
     #TODO: Read input and map to input layer, error correction
     #TODO: Output charts, plots, generalization graphs & tables, etc.
