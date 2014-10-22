@@ -82,15 +82,17 @@ if __name__ == '__main__':
         neurons = [ Neuron(bias, activation_func=phi, activation_prime=phi_prime) for _ in range(neuron_count) ]
         network.add_layer(neurons, layer_number)
 
-    mapping = {}
-    for i in network.get_input_layer():
-        mapping[i] = 1.0
-
-    network.forward_propagation(mapping)
-
-    for i in network.get_output_layer():
-        mapping[i] = 1.0
-    network.backward_propagation(mapping)
+    inputfile = open('TrainingData.txt')
+    training_raw = inputfile.read()
+    inputfile = open('TestingData.txt')
+    testing_raw = inputfile.read()
 
     #TODO: Read input and map to input layer, error correction
+    for line in training_raw:
+        pass #train the network via backprop
+
+    for line in testing_raw:
+        pass # calculate overall error of the system
+
+
     #TODO: Output charts, plots, generalization graphs & tables, etc.
