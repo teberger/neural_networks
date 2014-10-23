@@ -1,8 +1,8 @@
 __author__ = 'Taylor Berger'
 
 class Neuron():
-    def __init__(self, bias, activation_func, activation_prime):
-        self.bias  = bias
+    def __init__(self, activation_func, activation_prime, isBias=False):
+        self.isBias = isBias
         self.induced_field = 0.0
         self.y_output = 0.0
         self.local_gradient = 0.0
@@ -12,7 +12,7 @@ class Neuron():
         self.outputs = {}
 
     def __str__(self):
-        return 'Neuron: \n\tWeights: ' + str(self.outputs) + '\n'
+        return 'Neuron Outgoing Connections: ' + str(len(self.outputs)) + ', Incoming: ' + str(len(self.inputs))
 
     def __repr__(self):
         return str(self)
@@ -24,12 +24,15 @@ class Neuron():
         self.inputs.append(i)
 
     def forward_prop(self):
+        #bias nodes don't need to calculate local activations
+        if self.isBias:
+            return
+
         self.induced_field = 0.0
 
-        for i in self.inputs:
+        #assuming j=me, then
+        for i in self.inputs:     # the weight from i to j
             self.induced_field += i.outputs[self] * i.y_output
-
-        self.induced_field += self.bias
 
         self.y_output = self.phi(self.induced_field)
 
@@ -43,5 +46,14 @@ class Neuron():
 
         #adjust the input weights from me to the neurons I provide input to
         #based on the back propagation calculations
-        for i in self.outputs.keys():
-            self.outputs[i] += eta * i.local_gradient * self.y_output
+        for j in self.outputs.keys():
+            '''
+            print 'output weight', self.outputs[i]
+            print 'j local gradient', i.local_gradient
+            print 'my output', self.y_output
+            print 'delta w =', eta * i.local_gradient * self.y_output
+            print
+            '''
+            if (eta * j.local_gradient * self.y_output) < 0:
+                print "decreasing weight", eta * j.local_gradient * self.y_output
+            self.outputs[j] = self.outputs[j] + eta * j.local_gradient * self.y_output

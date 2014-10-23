@@ -15,6 +15,7 @@ class NeuralNetwork():
         self.weight_style = init_weights
         self.init_weight = init_weight
         self.max_layer = 0
+        self.e_squared = 0
         self.layers = {}
 
     def randomize_weight(self):
@@ -23,7 +24,7 @@ class NeuralNetwork():
         :return:
         """
         if self.weight_style == 'random':
-            return random.random()
+            return (random.random())
         else:
             return self.init_weight
 
@@ -34,6 +35,11 @@ class NeuralNetwork():
         :param layer_number:
         :return:
         """
+        bias_value = random.randint(1,10)
+        bias = Neuron(activation_func=lambda x: 0, activation_prime=lambda x: 0, isBias=True)
+        bias.y_output = bias_value
+
+        neurons.append(bias)
         self.layers[layer_number] = neurons
 
         if layer_number == 0:
@@ -45,8 +51,11 @@ class NeuralNetwork():
         for input in self.layers[layer_number - 1]:
             for output in neurons:
                 output.add_input_reference(input)
-                weight = self.randomize_weight()
-                input.add_output_connection(output, weight)
+
+                if not output.isBias:
+                    weight = self.randomize_weight()
+                    input.add_output_connection(output, weight)
+
 
     def forward_propagation(self, input_mapping):
         for n in self.get_input_layer():
@@ -59,18 +68,21 @@ class NeuralNetwork():
                 neuron.forward_prop()
 
     def backward_propagation(self, desired_output_mapping):
+        self.e_squared = 0
         for n in self.get_output_layer():
             error = desired_output_mapping[n] - n.y_output
+            self.e_squared += error * error
             n.local_gradient = error * n.phi_prime(n.induced_field)
 
-        #iterate backward through the layers to the input layer.
-        for i in range(len(self.layers)-1, -1, -1):
-            #TODO: bias updating needs to be done here
+        #iterate backward through the layers to the input layer, excluding the output
+        for i in range(len(self.layers)-2, -1, -1):
             for neuron in self.layers[i]:
                 neuron.back_prop(self.eta)
 
+        return self.e_squared
+
     def get_input_layer(self):
-        return self.layers[0]
+        return filter(lambda x: not x.isBias, self.layers[0])
 
     def get_output_layer(self):
-        return self.layers[self.max_layer]
+        return filter(lambda x: not x.isBias, self.layers[self.max_layer])
