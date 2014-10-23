@@ -29,12 +29,15 @@ class Neuron():
             return
 
         self.induced_field = 0.0
-
+        #print 'neuron'
         #assuming j=me, then
         for i in self.inputs:     # the weight from i to j
+#            print i.y_output, '*', i.outputs[self]
             self.induced_field += i.outputs[self] * i.y_output
 
         self.y_output = self.phi(self.induced_field)
+#        print 'my output:', self.y_output
+#        print
 
     def back_prop(self, eta):
         #first calculate my own local gradient for the neurons behind me
@@ -47,13 +50,4 @@ class Neuron():
         #adjust the input weights from me to the neurons I provide input to
         #based on the back propagation calculations
         for j in self.outputs.keys():
-            '''
-            print 'output weight', self.outputs[i]
-            print 'j local gradient', i.local_gradient
-            print 'my output', self.y_output
-            print 'delta w =', eta * i.local_gradient * self.y_output
-            print
-            '''
-            if (eta * j.local_gradient * self.y_output) < 0:
-                print "decreasing weight", eta * j.local_gradient * self.y_output
             self.outputs[j] = self.outputs[j] + eta * j.local_gradient * self.y_output

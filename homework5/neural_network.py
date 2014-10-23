@@ -63,15 +63,18 @@ class NeuralNetwork():
 
         #excluding the input layer, iterate through and propagate
         #information forward
+
         for i in range(1, len(self.layers)):
+#            print 'layer', i
             for neuron in self.layers[i]:
                 neuron.forward_prop()
+#        exit()
 
     def backward_propagation(self, desired_output_mapping):
         self.e_squared = 0
         for n in self.get_output_layer():
             error = desired_output_mapping[n] - n.y_output
-            self.e_squared += error * error
+            self.e_squared += error * error / 2
             n.local_gradient = error * n.phi_prime(n.induced_field)
 
         #iterate backward through the layers to the input layer, excluding the output

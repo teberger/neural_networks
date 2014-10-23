@@ -72,8 +72,8 @@ def parseArgs(args):
 if __name__ == '__main__':
     seed, eta, layers = parseArgs(sys.argv)
     random.seed(seed)
-    phi = partial(logistic_function, 1)
-    phi_prime = partial(logistic_deriv, 1)
+    phi = partial(logistic_function, 2)
+    phi_prime = partial(logistic_deriv, 2)
     network = NeuralNetwork(eta, init_weights='random')
 
     #input layer
@@ -122,18 +122,17 @@ if __name__ == '__main__':
     testing_raw = input_file.read()
 
     training_lines = training_raw.split('\n')
+    testing_lines = testing_raw.split('\n')
     #training_lines = filter(lambda x: (x.startswith('2')), training_lines)
 
-    for  i in range(10):
-#        random.shuffle(training_lines)
+    for  i in range(1000):
+        random.shuffle(training_lines)
         error_epoch = 0
         classification_errors_epoch = 0
-        zeta = 0
         classifications = {1:0, 2:0, 3:0, 4:0}
 
-        for _ in range(10):
-        #for line in training_lines:
-            line = training_lines[200]
+        for line in training_lines:
+            #print line
             line_sep = line.split(' ')
             line_sep = filter(lambda x : x != '', line_sep)
 
@@ -143,7 +142,6 @@ if __name__ == '__main__':
             c = int(line_sep[0])
             xs = [float(line_sep[2]), float(line_sep[3])]
             mapping = dict(zip(network.get_input_layer(), xs))
-            #print mapping
             network.forward_propagation(mapping)
 
             winner = 0
@@ -158,29 +156,55 @@ if __name__ == '__main__':
             classifications[winner] += 1
             if c != winner:
                 classification_errors_epoch += 1
-            '''
-            print 'class', c
-            for d in desired:
-                print '\td: ', d, ' error: ', network.backward_propagation(desired[d])
-'''
+
             error_epoch += network.backward_propagation(desired[c])
+
+
+
+        classification_error_testing = 0
+        testing_epoch_error = 0
+        classifications_testing = {1:0, 2:0, 3:0, 4:0}
+
+        for line in testing_lines:
+            line_sep = line.split(' ')
+            line_sep = filter(lambda x : x != '', line_sep)
+
+            if(len(line_sep) != 4):
+                continue
+
+            c = int(line_sep[0])
+            xs = [float(line_sep[2]), float(line_sep[3])]
+            mapping = dict(zip(network.get_input_layer(), xs))
+            network.forward_propagation(mapping)
+
+            winner = 0
+            z = 1
+            output = -1.0
+            for n in network.get_output_layer():
+                e = desired[c][n] - n.y_output
+                testing_epoch_error +=  e*e/2
+
+                if n.y_output > output:
+                    output = n.y_output
+                    winner = z
+                z+=1
+            classifications_testing[winner] += 1
+            if c != winner:
+                classification_error_testing += 1
 
         print
         print
         print 'Epoch', i
-        print 'Number of Incorrect Classifications:', classification_errors_epoch
+        print 'Number of Incorrect Training Classifications:', classification_errors_epoch
         for c in classifications.keys():
             print 'Class', c, 'count:', classifications[c]
-        print "Epoch Error:", error_epoch
+        print "Training Epoch Error:", error_epoch
 
+        print
 
-    print network.get_input_layer()
-    print network.get_output_layer()
-
-
-
-    for line in testing_raw:
-        pass # calculate overall error of the system
-
+        print 'Number of Incorrect Testing Classifications', classification_error_testing
+        for c in classifications_testing.keys():
+            print 'Class', c, 'count:', classifications_testing[c]
+        print 'Testing Epoch Error:', testing_epoch_error
 
     #TODO: Output charts, plots, generalization graphs & tables, etc.
