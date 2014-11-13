@@ -34,7 +34,7 @@ public class RadialBasisNetwork extends FullyConnectedNetwork {
 				double error = (desiredValues.get(i) - n.getOutput());
 				double delta_weight = eta *  input.getOutput() * error;
 				
-				n.adjustWeight(input, delta_weight);
+				n.addWeightAdjustment(input, delta_weight);
 			}
 		}
 	

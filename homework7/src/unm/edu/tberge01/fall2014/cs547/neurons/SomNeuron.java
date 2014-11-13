@@ -1,13 +1,9 @@
 package unm.edu.tberge01.fall2014.cs547.neurons;
 
-import java.util.Vector;
-
-import unm.edu.tberge01.fall2014.cs547.utils.VectorUtilities;
-
-public class SomNeuron extends McCullochPittsNeuron implements Neuron {
+public class SomNeuron extends McCullochPittsNeuron {
 
 	public static double getEuclideanDistance(SomNeuron n, SomNeuron m) {
-		return VectorUtilities.eclidianSquaredNorm(VectorUtilities.subtract(n.lattice_position, m.lattice_position));
+		return Math.sqrt((n.x - m.x) * (n.x - m.x) + (n.y - m.y)*(n.y - m.y));
 	}
 	
 	public static double getLateralMultiplier(SomNeuron n, SomNeuron m, double sigma) {
@@ -17,11 +13,14 @@ public class SomNeuron extends McCullochPittsNeuron implements Neuron {
 		return Math.exp(ret);
 	}
 	
-	private Vector<Double> lattice_position;
+	private final int x, y;
 	
-	public SomNeuron(Vector<Double> lattice_position) {
-		super();
-		
-		this.lattice_position = lattice_position;
+	public SomNeuron(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public double[] getLatticePosition() {
+		return new double[]{x,y};
 	}
 }

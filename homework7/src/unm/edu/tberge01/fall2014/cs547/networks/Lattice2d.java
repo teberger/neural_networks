@@ -3,7 +3,6 @@ package unm.edu.tberge01.fall2014.cs547.networks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.Vector;
 
 import unm.edu.tberge01.fall2014.cs547.neurons.InputNeuron;
@@ -26,10 +25,7 @@ public abstract class Lattice2d implements NeuralNetwork {
 		//construct the lattice
 		for (int x = 0; x < n; x++)
 			for (int y = 0; y < n; y++) {
-				Vector<Double> position = new Vector<Double>(2);
-				position.add((double)x);
-				position.add((double)y);
-				neurons[x][y] = new SomNeuron(position);
+				neurons[x][y] = new SomNeuron(x,y);
 				neuron_list.add(neurons[x][y]);
 			}
 		
@@ -37,7 +33,7 @@ public abstract class Lattice2d implements NeuralNetwork {
 		for (Neuron[] row : neurons)
 			for (Neuron neuron : row)
 				for (Neuron i : inputs)
-					neuron.addIncommingReference(i, weightGen.nextDouble());
+					neuron.addIncommingReference(i, weightGen.nextGaussian());
 	}
 	
 	@Override
@@ -49,5 +45,8 @@ public abstract class Lattice2d implements NeuralNetwork {
 			double val = inputValues.get(i);
 			n.setInput(val);
 		}
+		
+		for (SomNeuron n: this.neuron_list) 
+			n.calculateLocalPotential();
 	}
 }

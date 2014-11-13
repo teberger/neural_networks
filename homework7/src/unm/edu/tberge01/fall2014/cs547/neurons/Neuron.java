@@ -9,5 +9,5 @@ public interface Neuron extends Comparable<Neuron>{
 	public Set<Neuron> outgoingReferences();
 	public boolean addOutgoingReference(Neuron n);
 	public boolean addIncommingReference(Neuron n, double init_weight);
-	public boolean adjustWeight(Neuron n, double new_weight);
+	public boolean addWeightAdjustment(Neuron n, double new_weight);
 }

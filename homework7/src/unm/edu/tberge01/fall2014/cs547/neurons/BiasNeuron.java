@@ -46,7 +46,7 @@ public class BiasNeuron implements Neuron {
 	}
 
 	@Override
-	public boolean adjustWeight(Neuron n, double new_weight) {
+	public boolean addWeightAdjustment(Neuron n, double new_weight) {
 		return false;
 	}
 	

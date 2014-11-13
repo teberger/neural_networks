@@ -28,7 +28,7 @@ public abstract class AbstractNeuron implements Neuron {
 	 *
 	 */
 	@Override
-	public boolean adjustWeight(Neuron n, double value) {
+	public boolean addWeightAdjustment(Neuron n, double value) {
 		if (this.inputConnections.containsKey(n)) {
 			double prev = this.inputConnections.get(n);
 			this.inputConnections.put(n, prev + value);

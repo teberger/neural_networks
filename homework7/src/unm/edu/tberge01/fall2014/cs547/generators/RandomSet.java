@@ -7,6 +7,7 @@ import java.util.Vector;
 
 public class RandomSet extends PresentationSet {
 
+	private int numberOfCalls = 0;
 	public RandomSet(String filepath, String delim) throws IOException {
 		super(filepath, delim);
 	}
@@ -15,7 +16,7 @@ public class RandomSet extends PresentationSet {
 	public Iterator<Presentation> iterator() {
 		return new Iterator<Presentation>() {
 			private int count = 0;
-			private Random rand =  new Random();
+			private Random rand =  new Random(numberOfCalls+=31*numberOfCalls);
 			
 			@Override
 			public boolean hasNext() {
@@ -24,7 +25,11 @@ public class RandomSet extends PresentationSet {
 			
 			@Override
 			public Presentation next() {
-				String line = lines.get(rand.nextInt(size));
+				if (!hasNext())
+					return null;
+				
+				int idx = rand.nextInt(size);
+				String line = lines.get(idx);
 				line = line.replaceAll(delim + "+", delim);
 				String[] items = line.split(delim);
 				
@@ -32,6 +37,7 @@ public class RandomSet extends PresentationSet {
 				v.add(Double.parseDouble(items[2]));
 				v.add(Double.parseDouble(items[3]));
 				
+				count++;
 				return new Presentation(0, v);
 			}
 		};
